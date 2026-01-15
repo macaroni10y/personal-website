@@ -1,0 +1,211 @@
+---
+// About - Self-introduction section with mixed vertical/horizontal text
+interface Props {
+  content: string;
+}
+
+const { content } = Astro.props;
+
+const paragraphs = content.split('\n\n').filter(p => p.trim());
+---
+
+<section class="about" id="about">
+  <div class="about-container">
+    <!-- Section header -->
+    <div class="section-header">
+      <h2 class="section-title">About</h2>
+      <div class="title-line"></div>
+    </div>
+
+    <!-- Content area -->
+    <div class="about-content">
+      <div class="content-inner">
+        {paragraphs.map((paragraph, index) => (
+          <p class="about-text" style={`--delay: ${0.2 + index * 0.15}s`}>
+            {paragraph.trim()}
+          </p>
+        ))}
+      </div>
+
+      <!-- Portrait -->
+      <div class="decoration">
+        <img
+          src="/image.png"
+          alt="Portrait"
+          class="portrait"
+        />
+      </div>
+    </div>
+
+    <!-- Summary content (from slot) -->
+    <div class="summary-body">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    min-height: 80vh;
+    padding: 4rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-container {
+    max-width: 900px;
+    width: 100%;
+  }
+
+  /* Section Header */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    position: relative;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--paper-white);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .title-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--mist-strong), transparent);
+    margin-left: 2rem;
+  }
+
+  /* Content */
+  .about-content {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .about-content {
+      grid-template-columns: 1fr;
+    }
+
+    .decoration {
+      display: none;
+    }
+  }
+
+  .content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .about-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    line-height: 1.9;
+    color: var(--paper-cream);
+    margin: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: revealText 0.8s ease-out forwards;
+    animation-delay: var(--delay, 0.2s);
+    animation-play-state: paused;
+  }
+
+  .about-text.animate {
+    animation-play-state: running;
+  }
+
+  @keyframes revealText {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Decoration / Portrait */
+  .decoration {
+    position: relative;
+  }
+
+  .portrait {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: revealText 0.8s ease-out forwards;
+    animation-delay: 0.4s;
+    animation-play-state: paused;
+  }
+
+  .portrait.animate {
+    animation-play-state: running;
+  }
+
+  /* Summary body (slot content) */
+  .summary-body {
+    margin-top: 3rem;
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+    line-height: 1.9;
+    color: var(--paper-cream);
+  }
+
+  .summary-body:empty {
+    display: none;
+  }
+
+  .summary-body :global(p) {
+    margin: 0 0 1.5rem 0;
+  }
+
+  .summary-body :global(ul) {
+    margin: 0;
+    padding-left: 1.5rem;
+    display: grid;
+    gap: 0.75rem;
+    color: var(--mist-strong);
+  }
+
+  .summary-body :global(li) {
+    margin: 0;
+  }
+</style>
+
+<script>
+  function initAboutAnimations() {
+    const aboutSection = document.querySelector('.about');
+    if (!aboutSection) return;
+
+    const textElements = aboutSection.querySelectorAll('.about-text');
+    const portrait = aboutSection.querySelector('.portrait');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            textElements.forEach((el) => el.classList.add('animate'));
+            portrait?.classList.add('animate');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(aboutSection);
+  }
+
+  document.addEventListener('astro:page-load', initAboutAnimations);
+</script>

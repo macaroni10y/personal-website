@@ -1,0 +1,204 @@
+/* Color Palette */
+:root {
+  --ink-black: #0a0a0a;
+  --ink-deep: #111111;
+  --ink-gray: #1a1a1a;
+  --ink-lighter: #2a2a2a;
+  --paper-white: #f5f5f0;
+  --paper-cream: #e8e4dd;
+  --vermillion: #e54d42;
+  --vermillion-dark: #c43c32;
+  --vermillion-glow: rgba(229, 77, 66, 0.3);
+  --mist: rgba(245, 245, 240, 0.8);
+  --mist-strong: rgba(245, 245, 240, 0.8);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
+  background-color: var(--ink-black);
+  color: var(--paper-white);
+  line-height: 1.7;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Zen Kaku Gothic New', 'Shippori Mincho', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Selection */
+::selection {
+  background: var(--vermillion);
+  color: var(--paper-white);
+}
+
+::-moz-selection {
+  background: var(--vermillion);
+  color: var(--paper-white);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ink-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ink-lighter);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vermillion-dark);
+}
+
+/* Links */
+a {
+  color: var(--paper-white);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--vermillion);
+}
+
+/* Utility Classes */
+.text-vermillion {
+  color: var(--vermillion);
+}
+
+.bg-ink {
+  background-color: var(--ink-black);
+}
+
+/* Japanese Vertical Writing */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Animation Keyframes */
+@keyframes brushStroke {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes inkDrop {
+  0% {
+    transform: scale(0) translateY(-20px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.6;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes sealStamp {
+  0% {
+    transform: scale(1.2) rotate(-5deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(0.95) rotate(2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes inkSpread {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Grain Overlay */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}

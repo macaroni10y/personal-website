@@ -1,0 +1,418 @@
+---
+import LangSwitch from "./LangSwitch.astro";
+import { t, type Locale } from "../i18n/translations";
+
+interface Props {
+  locale: Locale;
+  isHome?: boolean;
+}
+
+const { locale, isHome = false } = Astro.props;
+const i18n = t(locale);
+
+const getNavHref = (anchor: string) =>
+  isHome ? `#${anchor}` : `/${locale}#${anchor}`;
+---
+
+<header class="site-header">
+  <a class="logo" href={`/${locale}`}>
+    <span class="logo-latin">macaroni10y</span>
+  </a>
+
+  <button
+    class="menu-toggle"
+    aria-expanded="false"
+    aria-controls="mobile-nav"
+    aria-label={i18n.nav.menuToggle}
+  >
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <div class="menu-overlay"></div>
+
+  <nav id="mobile-nav" class="site-nav">
+    <a href={getNavHref("about")}>{i18n.nav.about}</a>
+    <a href={getNavHref("projects")}>{i18n.nav.projects}</a>
+    <a href={getNavHref("links")}>{i18n.nav.links}</a>
+    <a href={`/${locale}/career`}>{i18n.nav.career}</a>
+    <div class="nav-lang-switch">
+      <LangSwitch />
+    </div>
+  </nav>
+
+  <div class="desktop-lang-switch">
+    <LangSwitch />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2.5rem;
+    z-index: 10;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 10, 10, 0.75) 0%,
+      rgba(10, 10, 10, 0) 100%
+    );
+    backdrop-filter: blur(6px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    z-index: 12;
+  }
+
+  .logo-latin {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.3em;
+    color: var(--paper-cream);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .site-nav a {
+    position: relative;
+    color: var(--paper-cream);
+  }
+
+  .site-nav a::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0%;
+    height: 1px;
+    background: var(--vermillion);
+    transition: width 0.3s ease;
+  }
+
+  .site-nav a:hover::after {
+    width: 100%;
+  }
+
+  /* Hide mobile-only elements on desktop */
+  .menu-toggle {
+    display: none;
+  }
+
+  .menu-overlay {
+    display: none;
+  }
+
+  .nav-lang-switch {
+    display: none;
+  }
+
+  .hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--paper-cream);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* Hamburger to X transformation */
+  .menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Overlay styles */
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 10, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9;
+  }
+
+  .menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 900px) {
+    .site-header {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .site-nav {
+      gap: 1rem;
+      letter-spacing: 0.12em;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-header {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0;
+      align-items: center;
+      background: linear-gradient(
+        180deg,
+        rgba(10, 10, 10, 0.9) 0%,
+        rgba(10, 10, 10, 0.6) 100%
+      );
+    }
+
+    /* Show hamburger button */
+    .menu-toggle {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 12;
+    }
+
+    .desktop-lang-switch {
+      display: none;
+    }
+
+    /* Show overlay */
+    .menu-overlay {
+      display: block;
+    }
+
+    /* Mobile nav panel */
+    .site-nav {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(280px, 80vw);
+      height: 100vh;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 0;
+      padding: 5rem 2rem 2rem;
+      background: linear-gradient(
+        135deg,
+        var(--ink-black) 0%,
+        var(--ink-deep) 100%
+      );
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 11;
+      overflow-y: auto;
+    }
+
+    .site-nav.open {
+      transform: translateX(0);
+    }
+
+    .site-nav a {
+      width: 100%;
+      padding: 1rem 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      border-bottom: 1px solid rgba(200, 190, 180, 0.1);
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
+    }
+
+    .site-nav.open a {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Staggered animation for nav links */
+    .site-nav.open a:nth-child(1) {
+      transition-delay: 0.1s;
+    }
+    .site-nav.open a:nth-child(2) {
+      transition-delay: 0.2s;
+    }
+    .site-nav.open a:nth-child(3) {
+      transition-delay: 0.3s;
+    }
+    .site-nav.open a:nth-child(4) {
+      transition-delay: 0.4s;
+    }
+
+    .site-nav a::after {
+      bottom: 0;
+    }
+
+    /* Show mobile lang switch */
+    .nav-lang-switch {
+      display: block;
+      width: 100%;
+      padding-top: 1.5rem;
+      margin-top: 1rem;
+      border-top: 1px solid rgba(200, 190, 180, 0.2);
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .site-nav.open .nav-lang-switch {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0.5s;
+    }
+  }
+
+  /* Body scroll lock when menu is open */
+  :global(body.menu-open) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  function initMobileMenu() {
+    const menuToggle = document.querySelector(
+      ".menu-toggle"
+    ) as HTMLButtonElement | null;
+    const nav = document.querySelector(".site-nav") as HTMLElement | null;
+    const overlay = document.querySelector(
+      ".menu-overlay"
+    ) as HTMLElement | null;
+
+    if (!menuToggle || !nav || !overlay) return;
+
+    const focusableElements = nav.querySelectorAll(
+      'a[href], button, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstFocusable = focusableElements[0] as HTMLElement;
+    const lastFocusable = focusableElements[
+      focusableElements.length - 1
+    ] as HTMLElement;
+
+    function openMenu() {
+      menuToggle!.setAttribute("aria-expanded", "true");
+      nav!.classList.add("open");
+      overlay!.classList.add("active");
+      document.body.classList.add("menu-open");
+
+      // Focus first nav item after animation
+      setTimeout(() => {
+        firstFocusable?.focus();
+      }, 400);
+    }
+
+    function closeMenu() {
+      menuToggle!.setAttribute("aria-expanded", "false");
+      nav!.classList.remove("open");
+      overlay!.classList.remove("active");
+      document.body.classList.remove("menu-open");
+
+      // Return focus to toggle button
+      menuToggle!.focus();
+    }
+
+    function toggleMenu() {
+      const isOpen = menuToggle!.getAttribute("aria-expanded") === "true";
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    // Toggle button click
+    menuToggle.addEventListener("click", toggleMenu);
+
+    // Overlay click to close
+    overlay.addEventListener("click", closeMenu);
+
+    // Close on nav link click
+    nav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 640) {
+          closeMenu();
+        }
+      });
+    });
+
+    // Escape key to close
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "Escape" &&
+        menuToggle!.getAttribute("aria-expanded") === "true"
+      ) {
+        closeMenu();
+      }
+    });
+
+    // Focus trap within menu
+    nav.addEventListener("keydown", (e) => {
+      if (e.key !== "Tab") return;
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable?.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable?.focus();
+        }
+      }
+    });
+
+    // Clean up on window resize (close menu if resizing to desktop)
+    window.addEventListener("resize", () => {
+      if (
+        window.innerWidth > 640 &&
+        menuToggle!.getAttribute("aria-expanded") === "true"
+      ) {
+        menuToggle!.setAttribute("aria-expanded", "false");
+        nav!.classList.remove("open");
+        overlay!.classList.remove("active");
+        document.body.classList.remove("menu-open");
+      }
+    });
+  }
+
+  // Initialize on page load
+  initMobileMenu();
+
+  // Re-initialize after View Transitions (Astro page navigation)
+  document.addEventListener("astro:after-swap", initMobileMenu);
+</script>

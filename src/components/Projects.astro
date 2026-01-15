@@ -1,0 +1,58 @@
+---
+import SectionHeader from "./ui/SectionHeader.astro";
+import Card from "./ui/Card.astro";
+import type { CardItem } from "../types";
+
+interface Props {
+  projects: CardItem[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section class="projects" id="projects">
+  <div class="projects-container">
+    <SectionHeader title="Projects" />
+
+    <div class="projects-grid">
+      {projects.map((project, index) => (
+        <Card
+          item={project}
+          delay={`${0.1 + index * 0.1}s`}
+          class="project-card"
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects {
+    min-height: 80vh;
+    padding: 4rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .projects-container {
+    max-width: 1000px;
+    width: 100%;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+</style>
+
+<script>
+  import { initScrollAnimation, registerAnimation } from "../lib/animations";
+
+  function initProjectsAnimations() {
+    initScrollAnimation(".projects", ".project-card");
+  }
+
+  registerAnimation(initProjectsAnimations);
+</script>

@@ -1,0 +1,81 @@
+---
+import Layout from "../layouts/Layout.astro";
+import InkBackground from "./InkBackground.astro";
+import Header from "./Header.astro";
+import Hero from "./Hero.astro";
+import About from "./About.astro";
+import Projects from "./Projects.astro";
+import Links from "./Links.astro";
+import { t, type Locale } from "../i18n/translations";
+
+// Dynamic imports for localized summary
+import SummaryJa from "../content/ja/summary.md";
+import SummaryEn from "../content/en/summary.md";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const i18n = t(locale);
+
+const Summary = locale === "ja" ? SummaryJa : SummaryEn;
+---
+
+<Layout title={i18n.meta.title} description={i18n.meta.description} locale={locale}>
+  <InkBackground />
+  <div class="page" id="top">
+    <Header locale={locale} isHome={true} />
+
+    <main>
+      <Hero
+        name={i18n.hero.name}
+        tagline={i18n.hero.tagline}
+        subtitle={i18n.hero.subtitle}
+      />
+      <About content={i18n.about.content}>
+        <Summary />
+      </About>
+      <Projects projects={[...i18n.projects]} />
+      <Links links={[...i18n.links]} locale={locale} />
+    </main>
+
+    <footer class="site-footer">
+      <p>{i18n.footer}</p>
+    </footer>
+  </div>
+</Layout>
+
+<style>
+  .page {
+    position: relative;
+    z-index: 1;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .site-footer {
+    padding: 4rem 2rem 6rem;
+    text-align: center;
+    font-family: "Cormorant Garamond", serif;
+    color: var(--mist-strong);
+    letter-spacing: 0.12em;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 640px) {
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .title-line {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="section-header">
+  <h2 class="section-title">{title}</h2>
+  <div class="title-line"></div>
+</div>
+
+<style>
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--paper-white);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .title-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--mist-strong), transparent);
+    margin-left: 2rem;
+  }
+</style>

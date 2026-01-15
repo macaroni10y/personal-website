@@ -1,0 +1,96 @@
+---
+import Layout from './Layout.astro';
+import InkBackground from '../components/InkBackground.astro';
+import Header from '../components/Header.astro';
+import { type Locale } from '../i18n/translations';
+
+interface Props {
+  title: string;
+  description: string;
+  locale?: Locale;
+}
+
+const { title, description, locale = (Astro.currentLocale as Locale) ?? "ja" } = Astro.props;
+---
+
+<Layout title={title} description={description} locale={locale}>
+  <InkBackground />
+  <div class="content-shell">
+    <Header locale={locale} />
+
+    <main class="content-body">
+      <slot />
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .content-shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 7rem 2rem 6rem;
+  }
+
+  .content-body {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--paper-cream);
+    line-height: 1.9;
+    font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+  }
+
+  .content-body :global(h1) {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 400;
+    font-style: italic;
+    margin: 0 0 1.5rem 0;
+    color: var(--paper-white);
+  }
+
+  .content-body :global(h2) {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 2.5rem 0 0.75rem;
+    color: var(--paper-white);
+  }
+
+  .content-body :global(h3) {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--paper-white);
+  }
+
+  .content-body :global(h4) {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin: 1.25rem 0 0.4rem;
+    color: var(--paper-cream);
+  }
+
+  .content-body :global(p) {
+    margin: 0 0 1.5rem 0;
+  }
+
+  .content-body :global(ul) {
+    margin: 0;
+    padding-left: 1.5rem;
+    display: grid;
+    gap: 0.5rem;
+    color: var(--mist-strong);
+  }
+
+  .content-body :global(strong) {
+    color: var(--paper-white);
+  }
+</style>

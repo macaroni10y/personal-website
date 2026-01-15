@@ -1,0 +1,54 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const { pathname } = Astro.url;
+const current = Astro.currentLocale ?? "ja";
+
+// Remove current locale prefix from path
+const rest = pathname.replace(new RegExp(`^/${current}`), "");
+const path = rest.replace(/^\/+/, "");
+---
+
+<nav class="lang-switch">
+  <a
+    href={getRelativeLocaleUrl("ja", path)}
+    class:list={["lang-link", { active: current === "ja" }]}
+  >
+    日本語
+  </a>
+  <span class="separator">/</span>
+  <a
+    href={getRelativeLocaleUrl("en", path)}
+    class:list={["lang-link", { active: current === "en" }]}
+  >
+    EN
+  </a>
+</nav>
+
+<style>
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+
+  .lang-link {
+    color: var(--mist-strong);
+    transition: color 0.2s ease;
+  }
+
+  .lang-link:hover {
+    color: var(--paper-cream);
+  }
+
+  .lang-link.active {
+    color: var(--paper-cream);
+  }
+
+  .separator {
+    color: var(--mist);
+  }
+</style>

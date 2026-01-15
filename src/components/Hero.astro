@@ -1,0 +1,228 @@
+---
+interface Props {
+  name: string;
+  tagline: string;
+  subtitle: string;
+}
+
+const {
+  name,
+  tagline,
+  subtitle,
+} = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero-content">
+    <!-- Main name with brush animation -->
+    <div class="name-container">
+      <h1 class="name">
+        <span class="brush-text">{name}</span>
+      </h1>
+
+      <!-- Decorative brush stroke under name -->
+      <svg class="brush-stroke" viewBox="0 0 400 30" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M0,15 Q50,5 100,15 T200,12 T300,18 T400,15"
+          stroke="currentColor"
+          stroke-width="3"
+          fill="none"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
+
+    <!-- Tagline -->
+    <div class="tagline-container">
+      <p class="tagline">{tagline}</p>
+      <div class="tagline-rule" aria-hidden="true"></div>
+    </div>
+
+    <!-- Subtitle -->
+    <p class="subtitle">{subtitle}</p>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7" />
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 2rem;
+  }
+
+  .hero-content {
+    text-align: center;
+    position: relative;
+    max-width: 800px;
+  }
+
+  /* Name styling */
+  .name-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .name {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: clamp(4rem, 15vw, 10rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0;
+    position: relative;
+  }
+
+  .brush-text {
+    display: inline-block;
+    background: linear-gradient(
+      135deg,
+      var(--paper-white) 0%,
+      var(--paper-cream) 50%,
+      var(--paper-white) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    animation: brushReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+  }
+
+  @keyframes brushReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(30px) skewY(3deg);
+      filter: blur(10px);
+    }
+    60% {
+      filter: blur(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) skewY(0);
+      filter: blur(0);
+    }
+  }
+
+  /* Brush stroke decoration */
+  .brush-stroke {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 400px;
+    height: 30px;
+    color: var(--vermillion);
+    opacity: 0;
+  }
+
+  .brush-stroke path {
+    stroke-dasharray: 500;
+    stroke-dashoffset: 500;
+    animation: drawStroke 1s ease-out 1s forwards;
+  }
+
+  @keyframes drawStroke {
+    to {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+
+  /* Tagline */
+  .tagline-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.8s forwards;
+  }
+
+  .tagline {
+    font-family: 'Kaushan Script', cursive;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: var(--paper-cream);
+    margin: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .tagline-rule {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--vermillion), transparent);
+    opacity: 0.7;
+  }
+
+  /* Subtitle */
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-style: italic;
+    color: var(--mist-strong);
+    margin: 0;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 1.1s forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--mist-strong);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 2s forwards;
+  }
+
+  .scroll-indicator svg {
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+</style>
