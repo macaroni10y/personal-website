@@ -28,7 +28,7 @@ export const translations = {
     projects: [
       {
         title: "macaroni poker",
-        url: "https://macaroni-poker1.vercel.app/",
+        url: "https://macaroni-poker.vercel.app/",
         description: "A planning poker application",
         icon: "portfolio",
       },
@@ -105,7 +105,7 @@ A software engineer at a Japanese entertainment company, designing, developing, 
     projects: [
       {
         title: "macaroni poker",
-        url: "https://macaroni-poker1.vercel.app/",
+        url: "https://macaroni-poker.vercel.app/",
         description: "A planning poker application",
         icon: "portfolio",
       },
