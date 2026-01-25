@@ -6,11 +6,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:cf": "astro build && wrangler pages dev ./dist",
+    "deploy": "astro build && wrangler pages deploy ./dist",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^5.16.9",
     "cheerio": "^1.1.2",
     "fast-xml-parser": "^5.3.3"
+  },
+  "devDependencies": {
+    "wrangler": "^4.60.0"
   }
 }
