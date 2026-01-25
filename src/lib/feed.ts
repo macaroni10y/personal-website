@@ -38,7 +38,7 @@ export async function fetchFeedArticles(
     return feedCache;
   }
 
-  const feedUrl = import.meta.env.BLOG_FEED_URL;
+  const feedUrl = process.env.BLOG_FEED_URL;
   if (!feedUrl) {
     console.warn("BLOG_FEED_URL is not set");
     return [];
